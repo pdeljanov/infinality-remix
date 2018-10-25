@@ -1,0 +1,102 @@
+# $Id: PKGBUILD 271839 2016-07-13 18:19:11Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgbase=freetype2-infinality-remix
+pkgname=(freetype2-infinality-remix freetype2-demos-infinality-remix)
+pkgver=2.9.1
+pkgrel=1
+_patchrel=2018.05.01
+pkgdesc="TrueType font rendering library with Infinality patches"
+arch=(i686 x86_64)
+license=('GPL')
+url="http://www.freetype.org/"
+
+# Adding harfbuzz for improved OpenType features auto-hinting
+# introduces a cycle dep to harfbuzz depending on freetype wanted by upstream
+makedepends=('libx11')
+
+install=freetype2.install
+
+source=(https://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.bz2
+        https://download.savannah.gnu.org/releases/freetype/freetype-doc-${pkgver}.tar.bz2
+        https://download-mirror.savannah.gnu.org/releases/freetype/ft2demos-${pkgver}.tar.bz2
+        0001-Enable-table-validation-modules.patch
+        0002-infinality-${pkgver}-${_patchrel}.patch
+        0004-Enable-long-PCF-family-names.patch
+        0005-freetype-2.5.2-more-demos.patch
+        freetype2.sh
+        infinality-settings.sh
+        xft-settings.sh)
+
+sha256sums=('db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d'
+            'aa2f835ef8f50072630ddc48b9eb65f1f456014ffa3b5adddcb6bf390a3c5828'
+            '806eb6363ee5963174a6740f9b7893377912165899c2c1f6372c422aab818c6a'
+            'dec2a03a7024e2504d82bf8e30013d7110a4b14664bfea9054c2728dbfb2497e'
+            'fdd11f231c7ee426d288c989214d22b9714c38d1ee8239d3acc9cc1a4ec1cf5b'
+            '7f5aa51a67a68002226f8e869eaa3f6b870c04d19135a14c64a6c355eb023a39'
+            '36484db4b926ed026e7f32570573493b5a9793a129f08d54383a26d65a6af89b'
+            'f7f8e09c44f7552c883846e9a6a1efc50377c4932234e74adc4a8ff750606467'
+            '1a5c12aa96e2ee66f7316b8ccb7012520b231a2d8ee21cfe4064aa28db35a57c'
+            '4842d1461c240cd0f60a7247ee038271fdb1067107bea9024be6bdbb218d1bd4')
+
+prepare() {
+    mv freetype-${pkgver} freetype2
+    mv ft2demos-${pkgver} freetype2-demos
+
+    # Patching FreeType
+    cd freetype2
+    patch -Np1 -i ../0001-Enable-table-validation-modules.patch
+    patch -Np1 --verbose -i ../0002-infinality-${pkgver}-${_patchrel}.patch
+    patch -Np1 -i ../0004-Enable-long-PCF-family-names.patch
+
+    # Patching FreeType Demos
+    cd ../freetype2-demos
+    patch -Np1 -i ../0005-freetype-2.5.2-more-demos.patch
+
+    # Suppress RPATH
+    sed -i '/X11_LIB:%=-R%/d' graph/x11/rules.mk
+}
+
+build() {
+    # Build FreeType
+    cd freetype2
+    ./configure --prefix=/usr --disable-static --with-harfbuzz --with-png
+    make
+
+    # Build FreeType demos
+    cd ../freetype2-demos
+    make
+}
+
+check() {
+    cd freetype2
+    make -k check
+}
+
+package_freetype2-infinality-remix() {
+    groups=('infinality-remix')
+    depends=('zlib' 'bzip2' 'sh' 'libpng' 'harfbuzz')
+    provides=("freetype2=$pkgver" 'freetype2-infinality' 'libfreetype.so')
+    conflicts=('freetype2' 'freetype2-infinality' 'freetype2-infinality-ultimate')
+
+    cd freetype2
+    make DESTDIR="${pkgdir}" install
+    # Disables changes to FREETYPE_PROPERTIES globally.
+    install -Dm644 ../freetype2.sh "${pkgdir}/etc/profile.d/freetype2.sh"
+    # Configures generic Xft hinting globally.
+    install -Dm644 ../xft-settings.sh "${pkgdir}/etc/X11/xinit/xinitrc.d/xft-settings.sh"
+    # Configures global default Infinality settings.
+    install -Dm644 ../infinality-settings.sh "${pkgdir}/etc/X11/xinit/xinitrc.d/infinality-settings.sh"
+}
+
+package_freetype2-demos-infinality-remix() {
+    pkgdesc="Freetype tools and demos"
+    depends=('freetype2' 'libx11')
+    conflicts=('freetype2-demos' 'freetype2-demos-git' 'freetype2-demos-infinality' 'freetype2-infinality-ultimate')
+
+    cd freetype2-demos
+    install -d "${pkgdir}/usr/bin"
+    for _i in bin/{f,t}t*; do
+        libtool --mode=install install $_i "${pkgdir}/usr/bin"
+    done
+}
