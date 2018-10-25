@@ -1,0 +1,74 @@
+# $Id: PKGBUILD 272756 2016-07-31 10:13:10Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Brice Carpentier <brice@daknet.org>
+
+pkgname=cairo-infinality-remix
+_name=cairo
+pkgver=1.16.0
+pkgrel=1
+pkgdesc="Cairo vector graphics library with Infinality patch support"
+arch=(i686 x86_64)
+license=('LGPL' 'MPL')
+url="http://cairographics.org/"
+groups=('infinality-remix')
+
+# requires libGL + libEGL - all libgl variants (mesa
+depends=('libpng' 'libxrender' 'libxext' 'fontconfig-infinality-remix' 'pixman' 'glib2' 'libgl' 'lzo')
+makedepends=('libgl' 'librsvg' 'gtk2' 'poppler-glib' 'libspectre' 'gtk-doc' 'valgrind' 'git')
+provides=('cairo-xcb' 'cairo')
+replaces=('cairo-xcb')
+conflicts=('cairo'
+            'cairo-git'
+            'cairo-nomesa'
+            'cairo-infinality'
+            'cairo-infinality-ultimate'
+            'cairo-cleartype'
+            'cairo-dfb'
+            'cairo-ocaml-git'
+            'cairo-ubuntu')
+
+source=("git+https://anongit.freedesktop.org/git/cairo#tag=$pkgver"
+        cairo-make-lcdfilter-default.patch
+        cairo-respect-fontconfig_pb.patch
+        cairo-server-side-gradients.patch
+        cairo-webkit-html5-fix.patch)
+
+sha256sums=('SKIP'
+            '9d692ffdbb13eaf5a66e7b5821fa6d67f2dbe3629d86d40e44f8bdcf0e6cdc2d'
+            '3ef17cfd14b3edc14092b5e96fc63673b6b020b7f05adaa59d3c3e4b0cfdde66'
+            'b80c99b10fd48dbf98abd70ca2d1265ad6035383c47bfbee5e540a814b6d2a23'
+            'e4fea537fae57f42a453dbace666482fc4de4cb7090d0141fdefb4388f842f32')
+
+prepare(){
+    cd $_name
+
+    patch -Np1 -i "${srcdir}"/cairo-make-lcdfilter-default.patch
+    patch -Np1 -i "${srcdir}"/cairo-respect-fontconfig_pb.patch
+    patch -Np1 -i "${srcdir}"/cairo-server-side-gradients.patch
+    patch -Np1 -i "${srcdir}"/cairo-webkit-html5-fix.patch
+    NOCONFIGURE=1 ./autogen.sh
+}
+
+build() {
+    cd $_name
+    ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-static \
+    --enable-tee \
+    --disable-lto \
+    --enable-gl \
+    --enable-egl \
+    --enable-svg \
+    --enable-ps \
+    --enable-pdf \
+    --enable-gobject \
+    --enable-gtk-doc
+    sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+    make
+}
+
+package() {
+    cd $_name
+    make DESTDIR="$pkgdir" install
+}

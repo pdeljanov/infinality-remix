@@ -30,6 +30,7 @@ The following packages are provided:
 | freetype2-infinality-remix | FreeType with the Infinality patch set. |
 | fontconfig-infinality-remix | Fontconfig with the Infinality patch set and upstream  configuration. |
 | cairo-infinality-remix | Cairo with the Infinality patch set applied. |
+| harfbuzz-infinality-remix | Upstream Harfbuzz, updated in-step with FreeType to prevent breakage. |
 | infinality-remix-config-base | The base Infinality Remix Fontconfig configuration files. |
 | infinality-remix-config-free-fonts | Infinality Remix tweaks for FOSS fonts. |
 | infinality-remix-config-ms-fonts | Infinality Remix tweaks for Microsoft fonts. |
