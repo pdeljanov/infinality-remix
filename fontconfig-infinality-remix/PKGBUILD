@@ -48,7 +48,7 @@ source=("git+https://anongit.freedesktop.org/git/fontconfig#tag=${pkgver}"
         0005-Makefile-${pkgver}.am.in.patch)
 
 sha256sums=('SKIP'
-            '2eadfc8c87a87afe2329e9e4e9b72981c2553316c5767433991d48dd47b99664'
+            '2068734e5367fc75c5be8407207222276b47e73d26f1d48235669e9e71c36e1d'
             'c291f3849369106c5005155b5b099459c86baf455cea0e080a76a3fdf8a8f4b7'
             '94e7b03a32304604be2cf5568c02805ea1ac45eb68104de400ae7f370e3e598b'
             '7a0597c3a926176b5c844aa15f3fc98007398eb24db336b059c30f1cec8510cf'
