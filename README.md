@@ -28,26 +28,17 @@ The following packages are provided:
 | Package | Description |
 |---------|-------------|
 | freetype2-infinality-remix | FreeType with the Infinality patch set. |
-| fontconfig-infinality-remix | Fontconfig with the Infinality patch set and upstream  configuration. |
+| fontconfig-infinality-remix | Fontconfig with the Infinality patch set and base configuration. |
 | cairo-infinality-remix | Cairo with the Infinality patch set applied. |
 | harfbuzz-infinality-remix | Upstream Harfbuzz, updated in-step with FreeType to prevent breakage. |
-| infinality-remix-config-base | The base Infinality Remix Fontconfig configuration files. |
-| infinality-remix-config-free-fonts | Infinality Remix tweaks for FOSS fonts. |
-| infinality-remix-config-ms-fonts | Infinality Remix tweaks for Microsoft fonts. |
-| infinality-remix-config-google-fonts | Infinality Remix tweaks for Google fonts. |
-| infinality-remix-config-apple-fonts | Infinality Remix tweaks for Apple fonts. |
-| infinality-remix-config-web-fonts | Infinality Remix tweaks for popular Web fonts. |
-| infinality-remix-config-extra-fonts | Infinality Remix tweaks for misc fonts. |
+| infinality-remix-config-base-fonts | Infinality Remix Fontconfig tweaks for popular fonts found in the official repositories and AUR. |
+| infinality-remix-config-web-fonts | Infinality Remix Fontconfig tweaks for popular Web fonts. |
 
 ## Installation ##
 
-To install FreeType with Infinality Remix and all font configuration tweaks simply run:
+To install FreeType with Infinality Remix simply run:
 
 ```pacman -Ss infinality-remix```
-
-To install the FreeType with Infinality Remix and keep your existing Fontconfig configuration:
-
-```pacman -Ss infinality-remix-custom```
 
 ## Contributing ##
 
