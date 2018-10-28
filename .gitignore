@@ -1,9 +1,5 @@
 pkg/
 src/
-cairo/
-fontconfig/
-freetype-*/
-
 
 *.tar
 *.tar.*
