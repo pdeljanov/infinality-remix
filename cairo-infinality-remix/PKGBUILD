@@ -1,6 +1,10 @@
-# $Id: PKGBUILD 272756 2016-07-31 10:13:10Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Brice Carpentier <brice@daknet.org>
+# Cairo with Infinality Patches (Infinality Remix repository)
+#
+# Maintainer: Philip Deljanov <philip@pdeljanov.com>
+# Last Update: 2019-10-29
+#
+# Based off the original Infinality Ultimate Bundle package by
+# bohoomil <bohoomil@zoho.com> and the upstream cairo package.
 
 pkgname=cairo-infinality-remix
 _name=cairo

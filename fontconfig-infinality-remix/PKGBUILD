@@ -1,5 +1,10 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Maintainer: bohoomil <bohoomil@zoho.com>
+# Fontconfig with Infinality Patches (Infinality Remix repository)
+#
+# Maintainer: Philip Deljanov <philip@pdeljanov.com>
+# Last Update: 2019-10-29
+#
+# Based off the original Infinality Ultimate Bundle package by
+# bohoomil <bohoomil@zoho.com> and the upstream fontconfig package.
 
 pkgname=fontconfig-infinality-remix
 _basename=fontconfig
