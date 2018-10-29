@@ -1,0 +1,18 @@
+# Infinality Remix meta package.
+#
+# Maintainer: Philip Deljanov <philip.deljanov@gmail.com>
+# Last Update: 2019-10-29
+
+pkgname=infinality-remix-meta
+pkgver=1
+pkgrel=1
+pkgdesc="Meta package the Infinality Remix bundle."
+arch=(i686 x86_64)
+groups=('infinality-remix')
+url="https://github.com/pdeljanov/infinality-remix-pkgs"
+license=('GPL3')
+depends=(
+        'freetype2-infinality-remix'
+        'fontconfig-infinality-remix'
+        'cairo-infinality-remix'
+        )
