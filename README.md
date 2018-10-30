@@ -36,9 +36,28 @@ The following packages are provided:
 
 ## Installation ##
 
-To install FreeType with Infinality Remix simply run:
+Add the ``` infinality-remix``` repository to your ```pacman.conf```:
 
-```pacman -Ss infinality-remix```
+```
+[infinality-remix]
+Server = https://arch.philipdeljanov.com/$repo/$arch
+```
+
+Import the signing key:
+```
+pacman-key --recv-keys 4A7A75F516EA65A1
+```
+
+Trust the signing key:
+```
+pacman-key --lsign-key 4A7A75F516EA65A1
+```
+
+Finally, refresh the Pacman database and install the Infinality Remix package group:
+
+```
+pacman -Syyu infinality-remix
+```
 
 ## Contributing ##
 
