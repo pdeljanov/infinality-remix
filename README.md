@@ -80,6 +80,35 @@ output should be similar to:
     ```
 To change these settings, edit `/etc/X11/xinit/xinitrc.d/xft-settings.sh`. *This setting only affects X11 applications.*
 
+## Recommended Fonts ##
+
+The following fonts are recommended and should be installed for a good experience:
+
+ * Caladea (`ttf-caladea`)
+ * Carlito (`ttf-carlito`)
+ * DejaVu (`ttf-dejavu`)
+ * Impallari Cantora (`ttf-impallari-cantora`)
+ * Liberation (`ttf-liberation`)
+ * Noto (`noto-fonts`)
+ * Open Sans (`ttf-opensans`)
+ * Overpass (`ttf-overpass`)
+ * Roboto (`ttf-roboto`)
+ * TeX Gyre (`tex-gyre-fonts`)
+ * Ubuntu (`ttf-ubuntu-font-family`)
+ * Courier Prime (`aur/ttf-courier-prime`)
+ * Gelasio (`aur/ttf-gelasio-ib`)
+ * Merriweather (`aur/ttf-merriweather`)
+ * Source Sans Pro (`aur/ttf-source-sans-pro-ibx`)
+ * Signika (`aur/ttf-signika`)
+
+
+ ### Optional ###
+
+The following fonts look excellent, but are not under permissive licenses.
+
+ * Consolas
+ * San Francisco Pro Display/Text
+
 ## Customization ##
 
 For more precise font rendering tweaks, edit `/etc/X11/xinit/xinitrc.d/infinality-settings.sh`.
