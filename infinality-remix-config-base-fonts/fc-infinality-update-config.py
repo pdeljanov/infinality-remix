@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # fc-infinality-update-config
-# Author: Philip Deljanov <philip@pdeljanov.com>
+# Author: Philip Deljanov <philip@philipdeljanov.com>
 #
 # This utility examines changes to the list of installed fonts and, as appropriate, links and/or unlinks font-specific
 # configuration files into /etc/fonts/conf.d/. Once complete the font cache is refreshed.
