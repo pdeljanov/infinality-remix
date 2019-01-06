@@ -25,39 +25,71 @@ The Infinality Remix repository has been created to address this problem. This r
 
 The following packages are provided:
 
-| Package | Description |
-|---------|-------------|
-| freetype2-infinality-remix | FreeType with the Infinality patch set. |
-| fontconfig-infinality-remix | Fontconfig with the Infinality patch set and base configuration. |
-| cairo-infinality-remix | Cairo with the Infinality patch set applied. |
-| harfbuzz-infinality-remix | Upstream Harfbuzz, updated in-step with FreeType to prevent breakage. |
-| infinality-remix-config-base-fonts | Infinality Remix Fontconfig tweaks for popular fonts found in the official repositories and AUR. |
-| infinality-remix-config-web-fonts | Infinality Remix Fontconfig tweaks for popular Web fonts. |
+| Package | Description | Status |
+|---------|-------------|--------|
+| freetype2-infinality-remix | FreeType with the Infinality patch set. | Done |
+| fontconfig-infinality-remix | Fontconfig with the Infinality patch set and base configuration. | Done |
+| cairo-infinality-remix | Cairo with the Infinality patch set applied. | Done |
+| harfbuzz-infinality-remix | Upstream Harfbuzz, updated in-step with FreeType to prevent breakage. | TBD |
+| infinality-remix-config-base-fonts | Infinality Remix Fontconfig tweaks for popular fonts found in the official repositories and AUR. | WIP |
+| infinality-remix-config-web-fonts | Infinality Remix Fontconfig tweaks for popular Web fonts. | WIP |
 
 ## Installation ##
 
-Add the ``` infinality-remix``` repository to your ```pacman.conf```:
+1. Remove all previous Infinality FreeType, Fontconfig, and Cairo packages and replace with the stock libraries.
 
-```
-[infinality-remix]
-Server = https://arch.philipdeljanov.com/$repo/$arch
-```
 
-Import the signing key:
-```
-pacman-key --recv-keys 4A7A75F516EA65A1
-```
+2. Remove any broken Infinality symlinks in /etc/fonts/conf.d/.
 
-Trust the signing key:
-```
-pacman-key --lsign-key 4A7A75F516EA65A1
-```
 
-Finally, refresh the Pacman database and install the Infinality Remix package group:
+3. Install the FreeType, Fontconfig, and Cairo packages, in that order:
 
-```
-pacman -Syyu infinality-remix
-```
+    ```
+    # Relative to the repository root directory.
+
+    cd ./freetype2-infinality-remix
+    makepkg -sci
+
+    cd ../fontconfig-infinality-remix
+    makepkg -sci
+
+    cd ../cairo-infinality-remix
+    makepkg -sci
+    ```
+
+4. Ensure your desktop environment's font rendering settings are correct:
+    * Anti-aliased font rendering is **enabled**.
+    * **RGB** sub-pixel rendering is enabled.
+    * **Slight** hinting is highly-recommended.
+    * Set your DPI correctly.
+
+
+5. Logout and back in of your desktop session for changes to take effect immediately.
+
+
+6. Verify through Xft that non-DE aware applications will use the recommended rendering settings. Run `xrdb -query | grep Xft`, and your
+output should be similar to:
+    ```
+    Xft.antialias:  1
+    Xft.autohint:   0
+    Xft.dpi:        96
+    Xft.hinting:    1
+    Xft.hintstyle:  hintslight
+    Xft.lcdfilter:  lcddefault
+    Xft.rgba:       rgb
+    ```
+To change these settings, edit `/etc/X11/xinit/xinitrc.d/xft-settings.sh`. *This setting only affects X11 applications.*
+
+## Customization ##
+
+For more precise font rendering tweaks, edit `/etc/X11/xinit/xinitrc.d/infinality-settings.sh`.
+ * The `INFINALITY_FT` variable may be used to set a preset style. Options are listed within `infinality-settings.sh`. The `ultimate3` setting is recommended, but `ultimate5` gives a "macOS" look and pairs well with Apple's San Francisco system font.
+
+ * The `INFINALITY_FT_*` variables may be used to create your own style or tweak the selected preset style.
+
+Changes made here will only apply to new desktop sessions.
+
+***Note:*** Chrome, Chrome-based browsers, and Firefox do not obey these customizations because they strip out unrecognized environment variables from their rendering processes. These applications will use the `ultimate3` preset as that's hardcoded as the default in the FreeType library. Test your customizations with GTK or QT applications.
 
 ## Contributing ##
 

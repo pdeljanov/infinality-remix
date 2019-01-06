@@ -9,10 +9,9 @@ post_install() {
 
   cat << _EOF
 
-  Thank you for checking out fontconfig-infinality-ultimate.
+  Thank you for checking out fontconfig-infinality-remix.
 
-  By default, fontconfig will use presets for the free font collection
-  from [infinality-bundle-fonts] repository.
+  By default, fontconfig will use use the remix font collection.
 
   If you are going to use either a custom font collection or core
   Microsoft families, set the appropriate presets using
@@ -29,12 +28,12 @@ _EOF
   done
   echo -e "Done."
 
-  echo -e "Creating symlinks for free font collection ..."
-  ln -sf ../conf.avail.infinality/free/30-metric-aliases-free.conf .
-  ln -sf ../conf.avail.infinality/free/37-repl-global-free.conf .
-  ln -sf ../conf.avail.infinality/free/60-latin-free.conf .
-  ln -sf ../conf.avail.infinality/free/65-non-latin-free.conf .
-  ln -sf ../conf.avail.infinality/free/66-aliases-wine-free.conf .
+  echo -e "Creating symlinks for remix font collection ..."
+  ln -sf ../conf.avail.infinality/remix/30-metric-aliases-remix.conf .
+  ln -sf ../conf.avail.infinality/remix/37-repl-global-remix.conf .
+  ln -sf ../conf.avail.infinality/remix/60-latin-remix.conf .
+  ln -sf ../conf.avail.infinality/remix/65-non-latin-remix.conf .
+  ln -sf ../conf.avail.infinality/remix/66-aliases-wine-remix.conf .
   echo -e "Done."
 
   popd > /dev/null
@@ -62,7 +61,7 @@ post_remove() {
 
   cat << _EOF
 
-  fontconfig-infinality-ultimate-git has been removed.
+  fontconfig-infinality-remix has been removed.
   Check for dead symlinks and leftover files
   in /etc/fonts/conf.d/
 

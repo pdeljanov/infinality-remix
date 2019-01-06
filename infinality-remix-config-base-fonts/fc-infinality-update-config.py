@@ -20,3 +20,29 @@
 #
 # Given an installed font, this script will link in the generic font family conf file, followed by the varation's conf
 # file as available. Therefore, conf files for font variations should have a higher priority.
+
+def main():
+    # Determine if running as root or user?
+
+    # Run fc-list.
+
+    # Parse fc-list.
+
+
+    # Discover configuration files in /etc/fonts/config.avail/fonts/
+
+    # Diff fonts in fc-list and available configuration files.
+
+
+    # Unlink old configuration files.
+
+
+    # Link in new configuration files.
+
+
+    # Run fc-cache -f.
+
+    # Done :)
+
+if __name__ == "__main__":
+    main()

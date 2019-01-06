@@ -53,7 +53,7 @@ source=("git+https://anongit.freedesktop.org/git/fontconfig#tag=${pkgver}"
         0005-Makefile-${pkgver}.am.in.patch)
 
 sha256sums=('SKIP'
-            '2068734e5367fc75c5be8407207222276b47e73d26f1d48235669e9e71c36e1d'
+            '63fd90ef3ed0b7bb37acc9ccc7c97991be411a105e8e06d311da293c5f716cda'
             'c291f3849369106c5005155b5b099459c86baf455cea0e080a76a3fdf8a8f4b7'
             '94e7b03a32304604be2cf5568c02805ea1ac45eb68104de400ae7f370e3e598b'
             '7a0597c3a926176b5c844aa15f3fc98007398eb24db336b059c30f1cec8510cf'
@@ -129,7 +129,7 @@ package() {
     cd "${srcdir}"/"${_basename}-infinality-remix-srcs"
 
     # Copy the Infinality font configuration preset folders which the Makefile will not include in the package.
-    cp -r conf/conf.d.infinality/{combi,free,ms} "${pkgdir}"/etc/fonts/conf.avail.infinality
+    cp -r conf/conf.d.infinality/{combi,free,ms,remix} "${pkgdir}"/etc/fonts/conf.avail.infinality
 
     # Copy extra documentation
     install -m755 -d "${pkgdir}"/usr/share/doc/"${pkgname}"
