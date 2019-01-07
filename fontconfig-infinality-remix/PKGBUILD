@@ -18,7 +18,7 @@ arch=('i686' 'x86_64')
 groups=('infinality-remix')
 
 depends=('expat' 'freetype2')
-makedepends=('gperf' 'python-lxml' 'python-six')
+makedepends=('gperf' 'python-lxml' 'python-six' 'git')
 options=('libtool')
 
 provides=('fontconfig=$pkgver' 'fontconfig-infinality-remix')

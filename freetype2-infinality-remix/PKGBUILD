@@ -18,7 +18,7 @@ url="http://www.freetype.org/"
 
 # Adding harfbuzz for improved OpenType features auto-hinting
 # introduces a cycle dep to harfbuzz depending on freetype wanted by upstream
-makedepends=('libx11')
+makedepends=('libx11' 'libpng' 'harfbuzz')
 
 install=freetype2.install
 
