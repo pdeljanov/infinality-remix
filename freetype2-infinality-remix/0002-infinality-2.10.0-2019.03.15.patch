@@ -1,5 +1,5 @@
 diff --git a/builds/freetype.mk b/builds/freetype.mk
-index 6f68a0f65..74f550b53 100644
+index 2b0ffaedd..a2bc85ba4 100644
 --- a/builds/freetype.mk
 +++ b/builds/freetype.mk
 @@ -164,6 +164,7 @@ FT_CFLAGS  = $(CPPFLAGS) \
@@ -11,7 +11,7 @@ index 6f68a0f65..74f550b53 100644
  
  
 diff --git a/configure b/configure
-index f9d218667..429d40e41 100755
+index 9a64f69c4..6161c0f3a 100755
 --- a/configure
 +++ b/configure
 @@ -13,6 +13,8 @@
@@ -24,11 +24,11 @@ index f9d218667..429d40e41 100755
  
  # respect GNUMAKE environment variable for backward compatibility
 diff --git a/devel/ftoption.h b/devel/ftoption.h
-index 1b4619eb0..33fa15dda 100644
+index 16cf4e126..f75552db5 100644
 --- a/devel/ftoption.h
 +++ b/devel/ftoption.h
-@@ -581,6 +581,16 @@ FT_BEGIN_HEADER
-   /*                                                                       */
+@@ -601,6 +601,16 @@ FT_BEGIN_HEADER
+    */
  #define TT_CONFIG_OPTION_BYTECODE_INTERPRETER
  
 +  /*************************************************************************/
@@ -42,23 +42,50 @@ index 1b4619eb0..33fa15dda 100644
 +  /*                                                                       */
 +#define FT_CONFIG_OPTION_INFINALITY_PATCHSET
  
-   /*************************************************************************/
-   /*                                                                       */
+   /**************************************************************************
+    *
 diff --git a/include/freetype/config/ftoption.h b/include/freetype/config/ftoption.h
-index 4bcab2af5..261846366 100644
+index 12f47a82e..946a2fb93 100644
 --- a/include/freetype/config/ftoption.h
 +++ b/include/freetype/config/ftoption.h
-@@ -122,7 +122,7 @@ FT_BEGIN_HEADER
-   /* rendering technology that produces excellent output without LCD       */
-   /* filtering.                                                            */
-   /*                                                                       */
+@@ -113,20 +113,21 @@ FT_BEGIN_HEADER
+ #define FT_CONFIG_OPTION_ENVIRONMENT_PROPERTIES
+ 
+ 
+-  /**************************************************************************
+-   *
+-   * Uncomment the line below if you want to activate LCD rendering
+-   * technology similar to ClearType in this build of the library.  This
+-   * technology triples the resolution in the direction color subpixels.  To
+-   * mitigate color fringes inherent to this technology, you also need to
+-   * explicitly set up LCD filtering.
+-   *
+-   * Note that this feature is covered by several Microsoft patents and
+-   * should not be activated in any default build of the library.  When this
+-   * macro is not defined, FreeType offers alternative LCD rendering
+-   * technology that produces excellent output without LCD filtering.
+-   */
 -/* #define FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
++  /*************************************************************************/
++  /*                                                                       */
++  /* Uncomment the line below if you want to activate LCD rendering        */
++  /* technology similar to ClearType in this build of the library.  This   */
++  /* technology triples the resolution in the direction color subpixels.   */
++  /* To mitigate color fringes inherent to this technology, you also need  */
++  /* to explicitly set up LCD filtering.                                   */
++  /*                                                                       */
++  /* Note that this feature is covered by several Microsoft patents        */
++  /* and should not be activated in any default build of the library.      */
++  /* When this macro is not defined, FreeType offers alternative LCD       */
++  /* rendering technology that produces excellent output without LCD       */
++  /* filtering.                                                            */
++  /*                                                                       */
 +#define FT_CONFIG_OPTION_SUBPIXEL_RENDERING
  
  
-   /*************************************************************************/
-@@ -600,6 +600,17 @@ FT_BEGIN_HEADER
-   /*                                                                       */
+   /**************************************************************************
+@@ -601,6 +602,17 @@ FT_BEGIN_HEADER
+    */
  #define TT_CONFIG_OPTION_BYTECODE_INTERPRETER
  
 +  /*************************************************************************/
@@ -73,11 +100,11 @@ index 4bcab2af5..261846366 100644
 +#define FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +
  
-   /*************************************************************************/
-   /*                                                                       */
-@@ -658,8 +669,8 @@ FT_BEGIN_HEADER
-   /* [1] https://www.microsoft.com/typography/cleartype/truetypecleartype.aspx */
-   /*                                                                       */
+   /**************************************************************************
+    *
+@@ -658,8 +670,8 @@ FT_BEGIN_HEADER
+    * https://www.microsoft.com/typography/cleartype/truetypecleartype.aspx
+    */
  /* #define TT_CONFIG_OPTION_SUBPIXEL_HINTING  1         */
 -#define TT_CONFIG_OPTION_SUBPIXEL_HINTING  2
 -/* #define TT_CONFIG_OPTION_SUBPIXEL_HINTING  ( 1 | 2 ) */
@@ -85,25 +112,25 @@ index 4bcab2af5..261846366 100644
 +#define TT_CONFIG_OPTION_SUBPIXEL_HINTING  ( 1 | 2 )
  
  
-   /*************************************************************************/
+   /**************************************************************************
 diff --git a/include/freetype/internal/ftobjs.h b/include/freetype/internal/ftobjs.h
-index 1c3c6ad45..287b832dc 100644
+index f3a41b35a..da08ed9ef 100644
 --- a/include/freetype/internal/ftobjs.h
 +++ b/include/freetype/internal/ftobjs.h
-@@ -931,6 +931,7 @@ FT_BEGIN_HEADER
+@@ -910,6 +910,7 @@ FT_BEGIN_HEADER
      FT_DebugHook_Func  debug_hooks[4];
  
  #ifdef FT_CONFIG_OPTION_SUBPIXEL_RENDERING
 +    FT_Int                   lcd_extra;        /* number of extra pixels */
      FT_LcdFiveTapFilter      lcd_weights;      /* filter weights, if any */
      FT_Bitmap_LcdFilterFunc  lcd_filter_func;  /* filtering callback     */
- #endif
+ #else
 diff --git a/src/autofit/aflatin.c b/src/autofit/aflatin.c
-index 9f1b54056..b1595ddbe 100644
+index dccdcaf34..dfe144e94 100644
 --- a/src/autofit/aflatin.c
 +++ b/src/autofit/aflatin.c
-@@ -24,7 +24,10 @@
- #include "afpic.h"
+@@ -23,7 +23,10 @@
+ #include "afglobal.h"
  #include "aflatin.h"
  #include "aferrors.h"
 -
@@ -114,9 +141,9 @@ index 9f1b54056..b1595ddbe 100644
  
  #ifdef AF_CONFIG_OPTION_USE_WARPER
  #include "afwarp.h"
-@@ -40,6 +43,10 @@
+@@ -39,6 +42,10 @@
  #undef  FT_COMPONENT
- #define FT_COMPONENT  trace_aflatin
+ #define FT_COMPONENT  aflatin
  
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +FT_Pos infinality_cur_width = 0;
@@ -125,7 +152,7 @@ index 9f1b54056..b1595ddbe 100644
  
    /* needed for computation of round vs. flat segments */
  #define FLAT_THRESHOLD( x )  ( x / 14 )
-@@ -1121,7 +1128,10 @@
+@@ -1145,7 +1152,10 @@
      FT_Pos        delta;
      AF_LatinAxis  axis;
      FT_UInt       nn;
@@ -137,7 +164,7 @@ index 9f1b54056..b1595ddbe 100644
  
      if ( dim == AF_DIMENSION_HORZ )
      {
-@@ -1149,7 +1159,7 @@
+@@ -1173,7 +1183,7 @@
      {
        AF_LatinAxis  Axis = &metrics->axis[AF_DIMENSION_VERT];
        AF_LatinBlue  blue = NULL;
@@ -146,7 +173,7 @@ index 9f1b54056..b1595ddbe 100644
  
        for ( nn = 0; nn < Axis->blue_count; nn++ )
        {
-@@ -1159,7 +1169,12 @@
+@@ -1183,7 +1193,12 @@
            break;
          }
        }
@@ -160,7 +187,7 @@ index 9f1b54056..b1595ddbe 100644
        if ( blue )
        {
          FT_Pos   scaled;
-@@ -1315,7 +1330,13 @@
+@@ -1339,7 +1354,13 @@
  
          /* a blue zone is only active if it is less than 3/4 pixels tall */
          dist = FT_MulFix( blue->ref.org - blue->shoot.org, scale );
@@ -174,7 +201,7 @@ index 9f1b54056..b1595ddbe 100644
          {
  #if 0
            FT_Pos  delta1;
-@@ -1366,7 +1387,12 @@
+@@ -1390,7 +1411,12 @@
              delta2 = -delta2;
  
            blue->ref.fit   = FT_PIX_ROUND( blue->ref.cur );
@@ -187,7 +214,7 @@ index 9f1b54056..b1595ddbe 100644
  
  #endif
  
-@@ -2509,7 +2535,10 @@
+@@ -2528,7 +2554,10 @@
                dist = edge->fpos - blue->shoot.org;
                if ( dist < 0 )
                  dist = -dist;
@@ -199,7 +226,7 @@ index 9f1b54056..b1595ddbe 100644
                dist = FT_MulFix( dist, scale );
                if ( dist < best_dist )
                {
-@@ -2685,8 +2714,17 @@
+@@ -2704,8 +2733,17 @@
      FT_Pos           dist     = width;
      FT_Int           sign     = 0;
      FT_Int           vertical = ( dim == AF_DIMENSION_VERT );
@@ -219,7 +246,7 @@ index 9f1b54056..b1595ddbe 100644
      if ( !AF_LATIN_HINTS_DO_STEM_ADJUST( hints ) ||
           axis->extra_light                       )
        return width;
-@@ -2696,9 +2734,76 @@
+@@ -2715,9 +2753,76 @@
        dist = -width;
        sign = 1;
      }
@@ -297,7 +324,7 @@ index 9f1b54056..b1595ddbe 100644
      {
        /* smooth hinting process: very lightly quantize the stem width */
  
-@@ -2790,6 +2895,9 @@
+@@ -2809,6 +2914,9 @@
        }
      }
      else
@@ -307,7 +334,7 @@ index 9f1b54056..b1595ddbe 100644
      {
        /* strong hinting process: snap the stem width to integer pixels */
  
-@@ -2797,7 +2905,10 @@
+@@ -2816,7 +2924,10 @@
  
  
        dist = af_latin_snap_width( axis->widths, axis->width_count, dist );
@@ -319,7 +346,7 @@ index 9f1b54056..b1595ddbe 100644
        if ( vertical )
        {
          /* in the case of vertical hinting, always round */
-@@ -2860,6 +2971,32 @@
+@@ -2879,6 +2990,32 @@
      }
  
    Done_Width:
@@ -352,7 +379,7 @@ index 9f1b54056..b1595ddbe 100644
      if ( sign )
        dist = -dist;
  
-@@ -2878,6 +3015,8 @@
+@@ -2897,6 +3034,8 @@
      FT_Pos  dist, base_delta;
      FT_Pos  fitted_width;
  
@@ -361,7 +388,7 @@ index 9f1b54056..b1595ddbe 100644
  
      dist       = stem_edge->opos - base_edge->opos;
      base_delta = base_edge->pos - base_edge->opos;
-@@ -3490,8 +3629,11 @@
+@@ -3504,8 +3643,11 @@
      int       dim;
  
      AF_LatinAxis  axis;
@@ -375,7 +402,7 @@ index 9f1b54056..b1595ddbe 100644
      error = af_glyph_hints_reload( hints, outline );
      if ( error )
        goto Exit;
-@@ -3555,7 +3697,11 @@
+@@ -3569,7 +3711,11 @@
      }
  
      af_glyph_hints_save( hints, outline );
@@ -389,7 +416,7 @@ index 9f1b54056..b1595ddbe 100644
      return error;
    }
 diff --git a/src/autofit/aflatin.h b/src/autofit/aflatin.h
-index 432cccce4..6e03d50c3 100644
+index 40479538c..c86ea813f 100644
 --- a/src/autofit/aflatin.h
 +++ b/src/autofit/aflatin.h
 @@ -64,6 +64,9 @@ FT_BEGIN_HEADER
@@ -403,12 +430,12 @@ index 432cccce4..6e03d50c3 100644
  #define AF_LATIN_BLUE_ACTIVE      ( 1U << 0 ) /* zone height is <= 3/4px   */
  #define AF_LATIN_BLUE_TOP         ( 1U << 1 ) /* we have a top blue zone   */
 diff --git a/src/autofit/afmodule.c b/src/autofit/afmodule.c
-index dcaa17a27..aa349d58e 100644
+index 3e46a3655..9d35874d3 100644
 --- a/src/autofit/afmodule.c
 +++ b/src/autofit/afmodule.c
-@@ -22,6 +22,10 @@
+@@ -21,6 +21,10 @@
+ #include "afloader.h"
  #include "aferrors.h"
- #include "afpic.h"
  
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +#include "../base/ftinf.h"
@@ -417,7 +444,7 @@ index dcaa17a27..aa349d58e 100644
  #ifdef FT_DEBUG_AUTOFIT
  
  #ifndef FT_MAKE_OPTION_SINGLE_OBJECT
-@@ -477,6 +481,9 @@
+@@ -451,6 +455,9 @@
      module->warping           = 0;
  #endif
      module->no_stem_darkening = TRUE;
@@ -428,10 +455,10 @@ index dcaa17a27..aa349d58e 100644
      module->darken_params[0]  = CFF_CONFIG_OPTION_DARKENING_PARAMETER_X1;
      module->darken_params[1]  = CFF_CONFIG_OPTION_DARKENING_PARAMETER_Y1;
 diff --git a/src/base/Jamfile b/src/base/Jamfile
-index 4994c1b4c..e3ae751c1 100644
+index 8e1ec4275..f6f60e677 100644
 --- a/src/base/Jamfile
 +++ b/src/base/Jamfile
-@@ -58,6 +58,7 @@ SubDir  FT2_TOP $(FT2_SRC_DIR) base ;
+@@ -59,6 +59,7 @@ SubDir  FT2_TOP $(FT2_SRC_DIR) base ;
                      ftglyph
                      ftgxval
                      ftinit
@@ -440,7 +467,7 @@ index 4994c1b4c..e3ae751c1 100644
                      ftotval
                      ftpatent
 diff --git a/src/base/ftbase.c b/src/base/ftbase.c
-index f914b9b24..a3c2afd5d 100644
+index fb8cbfcc2..6db31550f 100644
 --- a/src/base/ftbase.c
 +++ b/src/base/ftbase.c
 @@ -37,6 +37,9 @@
@@ -2555,21 +2582,21 @@ index 000000000..5f6e0ae62
 +   gperf --output-file=ftinf_sh.c ftinf_sh.gperf
 +*/
 diff --git a/src/base/ftinit.c b/src/base/ftinit.c
-index 1fa472109..e73e9bcdb 100644
+index 9d524effa..5332fd958 100644
 --- a/src/base/ftinit.c
 +++ b/src/base/ftinit.c
-@@ -43,7 +43,9 @@
+@@ -43,6 +43,10 @@
  #include FT_INTERNAL_DEBUG_H
  #include FT_MODULE_H
- #include "basepic.h"
--
+ 
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +#include "ftinf.h"
 +#endif
++
  
-   /*************************************************************************/
-   /*                                                                       */
-@@ -341,10 +343,14 @@
+   /**************************************************************************
+    *
+@@ -217,10 +221,14 @@
      error = FT_New_Library( memory, alibrary );
      if ( error )
        FT_Done_Memory( memory );
@@ -2588,7 +2615,7 @@ index 1fa472109..e73e9bcdb 100644
      return error;
    }
 diff --git a/src/base/ftlcdfil.c b/src/base/ftlcdfil.c
-index 8d314df08..e8d8ff821 100644
+index 9fb49ba11..e03fbc081 100644
 --- a/src/base/ftlcdfil.c
 +++ b/src/base/ftlcdfil.c
 @@ -22,7 +22,10 @@
@@ -2603,7 +2630,7 @@ index 8d314df08..e8d8ff821 100644
  
  #ifdef FT_CONFIG_OPTION_SUBPIXEL_RENDERING
  
-@@ -287,6 +290,7 @@
+@@ -299,6 +302,7 @@
  
      ft_memcpy( library->lcd_weights, weights, FT_LCD_FILTER_FIVE_TAPS );
      library->lcd_filter_func = ft_lcd_filter_fir;
@@ -2611,7 +2638,7 @@ index 8d314df08..e8d8ff821 100644
  
      return FT_Err_Ok;
    }
-@@ -296,11 +300,37 @@
+@@ -310,11 +314,37 @@
    FT_Library_SetLcdFilter( FT_Library    library,
                             FT_LcdFilter  filter )
    {
@@ -2651,7 +2678,7 @@ index 8d314df08..e8d8ff821 100644
  
      if ( !library )
        return FT_THROW( Invalid_Library_Handle );
-@@ -309,6 +339,7 @@
+@@ -323,6 +353,7 @@
      {
      case FT_LCD_FILTER_NONE:
        library->lcd_filter_func = NULL;
@@ -2659,7 +2686,7 @@ index 8d314df08..e8d8ff821 100644
        break;
  
      case FT_LCD_FILTER_DEFAULT:
-@@ -316,6 +347,7 @@
+@@ -330,6 +361,7 @@
                   default_weights,
                   FT_LCD_FILTER_FIVE_TAPS );
        library->lcd_filter_func = ft_lcd_filter_fir;
@@ -2667,7 +2694,7 @@ index 8d314df08..e8d8ff821 100644
        break;
  
      case FT_LCD_FILTER_LIGHT:
-@@ -323,6 +355,7 @@
+@@ -337,6 +369,7 @@
                   light_weights,
                   FT_LCD_FILTER_FIVE_TAPS );
        library->lcd_filter_func = ft_lcd_filter_fir;
@@ -2675,7 +2702,7 @@ index 8d314df08..e8d8ff821 100644
        break;
  
  #ifdef USE_LEGACY
-@@ -330,6 +363,7 @@
+@@ -344,6 +377,7 @@
      case FT_LCD_FILTER_LEGACY:
      case FT_LCD_FILTER_LEGACY1:
        library->lcd_filter_func = _ft_lcd_filter_legacy;
@@ -2684,7 +2711,7 @@ index 8d314df08..e8d8ff821 100644
  
  #endif
 diff --git a/src/base/ftobjs.c b/src/base/ftobjs.c
-index 8d07e35ae..66ec5134c 100644
+index 3f8619d3b..d8fd36c81 100644
 --- a/src/base/ftobjs.c
 +++ b/src/base/ftobjs.c
 @@ -46,7 +46,9 @@
@@ -2698,7 +2725,7 @@ index 8d07e35ae..66ec5134c 100644
  
  #ifdef FT_DEBUG_LEVEL_TRACE
  
-@@ -84,6 +86,11 @@
+@@ -96,6 +98,11 @@
  
  #define GRID_FIT_METRICS
  
@@ -2710,7 +2737,7 @@ index 8d07e35ae..66ec5134c 100644
  
    /* forward declaration */
    static FT_Error
-@@ -702,6 +709,25 @@
+@@ -739,6 +746,25 @@
    ft_lookup_glyph_renderer( FT_GlyphSlot  slot );
  
  
@@ -2736,7 +2763,7 @@ index 8d07e35ae..66ec5134c 100644
  #ifdef GRID_FIT_METRICS
    static void
    ft_glyphslot_grid_fit_metrics( FT_GlyphSlot  slot,
-@@ -768,8 +794,18 @@
+@@ -805,8 +831,18 @@
      FT_Bool       autohint = FALSE;
      FT_Module     hinter;
      TT_Face       ttface = (TT_Face)face;
@@ -2755,7 +2782,7 @@ index 8d07e35ae..66ec5134c 100644
      if ( !face || !face->size || !face->glyph )
        return FT_THROW( Invalid_Face_Handle );
  
-@@ -872,6 +908,18 @@
+@@ -908,6 +944,18 @@
      {
        FT_AutoHinter_Interface  hinting;
  
@@ -2774,7 +2801,7 @@ index 8d07e35ae..66ec5134c 100644
  
        /* try to load embedded bitmaps first if available            */
        /*                                                            */
-@@ -917,6 +965,18 @@
+@@ -953,6 +1001,18 @@
        if ( error )
          goto Exit;
  
@@ -2793,7 +2820,7 @@ index 8d07e35ae..66ec5134c 100644
        if ( slot->format == FT_GLYPH_FORMAT_OUTLINE )
        {
          /* check that the loaded outline is correct */
-@@ -5172,6 +5232,11 @@
+@@ -5292,6 +5352,11 @@
      /* That's ok now */
      *alibrary = library;
  
@@ -2803,13 +2830,13 @@ index 8d07e35ae..66ec5134c 100644
 +#endif
 +
      return FT_Err_Ok;
+   }
  
- #ifdef FT_CONFIG_OPTION_PIC
 diff --git a/src/base/ftoutln.c b/src/base/ftoutln.c
-index cb91321de..d5d12d682 100644
+index 00329b46c..fcf45d58f 100644
 --- a/src/base/ftoutln.c
 +++ b/src/base/ftoutln.c
-@@ -29,7 +29,9 @@
+@@ -22,7 +22,9 @@
  #include FT_INTERNAL_CALC_H
  #include FT_INTERNAL_DEBUG_H
  #include FT_TRIGONOMETRY_H
@@ -2818,16 +2845,23 @@ index cb91321de..d5d12d682 100644
 +#include "ftinf.h"
 +#endif
  
-   /*************************************************************************/
-   /*                                                                       */
-@@ -914,7 +916,13 @@
-     FT_Vector*  points;
-     FT_Int      c, first, last;
-     FT_Int      orientation;
+   /**************************************************************************
+    *
+@@ -897,10 +899,16 @@
+                          FT_Pos       xstrength,
+                          FT_Pos       ystrength )
+   {
+-    FT_Vector*      points;
+-    FT_Int          c, first, last;
+-    FT_Orientation  orientation;
+-
++    FT_Vector*  points;
++    FT_Int      c, first, last;
++    FT_Int      orientation;
 +#ifdef FT_CONFIG_OPTION_INFINALITY_PATCHSET
 +    FT_Bool use_various_tweaks = FALSE;
 +    if( ftinf ) use_various_tweaks=ftinf->use_various_tweaks;
- 
++
 +    if ( use_various_tweaks )
 +      ystrength = FT_PIX_FLOOR ( ystrength );
 +#endif
@@ -2835,7 +2869,7 @@ index cb91321de..d5d12d682 100644
      if ( !outline )
        return FT_THROW( Invalid_Outline );
 diff --git a/src/base/ftsynth.c b/src/base/ftsynth.c
-index c28346707..b3d40824b 100644
+index f87ed65e7..620d57f07 100644
 --- a/src/base/ftsynth.c
 +++ b/src/base/ftsynth.c
 @@ -22,7 +22,9 @@
@@ -2847,8 +2881,8 @@ index c28346707..b3d40824b 100644
 +#include "ftinf.h"
 +#endif
  
-   /*************************************************************************/
-   /*                                                                       */
+   /**************************************************************************
+    *
 @@ -93,7 +95,10 @@
      FT_Face     face;
      FT_Error    error;
@@ -2890,10 +2924,10 @@ index c28346707..b3d40824b 100644
      slot->metrics.vertAdvance  += ystr;
      slot->metrics.horiBearingY += ystr;
 diff --git a/src/base/rules.mk b/src/base/rules.mk
-index e9805bd06..0d3f6e9ce 100644
+index 4b24c6dce..b8771b9ca 100644
 --- a/src/base/rules.mk
 +++ b/src/base/rules.mk
-@@ -43,6 +43,7 @@ BASE_SRC := $(BASE_DIR)/basepic.c  \
+@@ -44,6 +44,7 @@ BASE_SRC := $(BASE_DIR)/ftadvanc.c \
              $(BASE_DIR)/ftfntfmt.c \
              $(BASE_DIR)/ftgloadr.c \
              $(BASE_DIR)/fthash.c   \
@@ -2902,10 +2936,10 @@ index e9805bd06..0d3f6e9ce 100644
              $(BASE_DIR)/ftobjs.c   \
              $(BASE_DIR)/ftoutln.c  \
 diff --git a/src/cff/cffobjs.c b/src/cff/cffobjs.c
-index a2d7aec65..aa5bb0a00 100644
+index 1a1030c06..fd368a539 100644
 --- a/src/cff/cffobjs.c
 +++ b/src/cff/cffobjs.c
-@@ -44,6 +44,9 @@
+@@ -43,6 +43,9 @@
  #include FT_INTERNAL_POSTSCRIPT_AUX_H
  #include FT_SERVICE_CFF_TABLE_LOAD_H
  
@@ -2913,8 +2947,8 @@ index a2d7aec65..aa5bb0a00 100644
 +#include "../base/ftinf.h"
 +#endif
  
-   /*************************************************************************/
-   /*                                                                       */
+   /**************************************************************************
+    *
 @@ -1170,6 +1173,9 @@
  #endif
  
@@ -2926,19 +2960,46 @@ index a2d7aec65..aa5bb0a00 100644
      driver->darken_params[0] = CFF_CONFIG_OPTION_DARKENING_PARAMETER_X1;
      driver->darken_params[1] = CFF_CONFIG_OPTION_DARKENING_PARAMETER_Y1;
 diff --git a/src/smooth/ftsmooth.c b/src/smooth/ftsmooth.c
-index ef176bdf1..46da42efc 100644
+index c8b6bb751..e82c15c25 100644
 --- a/src/smooth/ftsmooth.c
 +++ b/src/smooth/ftsmooth.c
-@@ -4,7 +4,7 @@
- /*                                                                         */
- /*    Anti-aliasing renderer interface (body).                             */
- /*                                                                         */
--/*  Copyright 2000-2018 by                                                 */
+@@ -1,19 +1,19 @@
+-/****************************************************************************
+- *
+- * ftsmooth.c
+- *
+- *   Anti-aliasing renderer interface (body).
+- *
+- * Copyright (C) 2000-2019 by
+- * David Turner, Robert Wilhelm, and Werner Lemberg.
+- *
+- * This file is part of the FreeType project, and may only be used,
+- * modified, and distributed under the terms of the FreeType project
+- * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+- * this file you indicate that you have read the license and
+- * understand and accept it fully.
+- *
+- */
++/***************************************************************************/
++/*                                                                         */
++/*  ftsmooth.c                                                             */
++/*                                                                         */
++/*    Anti-aliasing renderer interface (body).                             */
++/*                                                                         */
 +/*  Copyright 2000-2017 by                                                 */
- /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
- /*                                                                         */
- /*  This file is part of the FreeType project, and may only be used,       */
-@@ -26,68 +26,2293 @@
++/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
++/*                                                                         */
++/*  This file is part of the FreeType project, and may only be used,       */
++/*  modified, and distributed under the terms of the FreeType project      */
++/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
++/*  this file you indicate that you have read the license and              */
++/*  understand and accept it fully.                                        */
++/*                                                                         */
++/***************************************************************************/
+ 
+ 
+ #include <ft2build.h>
+@@ -25,88 +25,2293 @@
  
  #include "ftsmerrs.h"
  
@@ -2954,11 +3015,11 @@ index ef176bdf1..46da42efc 100644
 +#define STVALUES if (verbose) \
 +  printf ( "scale:%f translate:%ld ", *scale_value, *translate_value );
 +#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
-+
-+  /* initialize renderer -- init its raster */
-+  static FT_Error
-+  ft_smooth_init( FT_Renderer  render )
-+  {
+ 
+   /* initialize renderer -- init its raster */
+   static FT_Error
+   ft_smooth_init( FT_Renderer  render )
+   {
 +    render->clazz->raster_class->raster_reset( render->raster, NULL, 0 );
 +
 +    return 0;
@@ -4786,12 +4847,7 @@ index ef176bdf1..46da42efc 100644
 +           /* snap right */
 +          *translate_value = ( modulus - delta ) / ( columns_per_pixel * 4 );
 +      }
- 
--  /* initialize renderer -- init its raster */
--  static FT_Error
--  ft_smooth_init( FT_Renderer  render )
--  {
--    render->clazz->raster_class->raster_reset( render->raster, NULL, 0 );
++
 +      if ( strategy_use_d_correction )
 +      {
 +        /* if the only stem is in the last 1/3 of glyph width, the advance */
@@ -4806,8 +4862,7 @@ index ef176bdf1..46da42efc 100644
 +          *translate_value = ( modulus - delta ) / ( columns_per_pixel * 4 );
 +      }
  
--    return 0;
--  }
+-#ifndef FT_CONFIG_OPTION_SUBPIXEL_RENDERING
 +      if ( strategy_use_strengths )
 +      {
 +        /* consider 1/2 pixel the max when strength is at 100%,
@@ -4824,6 +4879,7 @@ index ef176bdf1..46da42efc 100644
 +          *translate_value = max_strength;
 +      }
  
+-    FT_Vector*  sub = render->root.library->lcd_geometry;
 +      /* If 2 stems is detected, scale distance
 +         between in order to land on pixels */
 +      if ( valid_stems >= 2 )
@@ -4911,17 +4967,6 @@ index ef176bdf1..46da42efc 100644
 +            goto Exit;
 +          }
  
--  /* sets render-specific mode */
--  static FT_Error
--  ft_smooth_set_mode( FT_Renderer  render,
--                      FT_ULong     mode_tag,
--                      FT_Pointer   data )
--  {
--    /* we simply pass it to the raster */
--    return render->clazz->raster_class->raster_set_mode( render->raster,
--                                                         mode_tag,
--                                                         data );
--  }
 +        }
 +        else if ( columns_per_pixel == 1                                &&
 +                  valid_stems == 3 &&
@@ -4992,14 +5037,13 @@ index ef176bdf1..46da42efc 100644
 +            goto Exit;
 +          }
  
--  /* transform a given glyph image */
--  static FT_Error
--  ft_smooth_transform( FT_Renderer       render,
--                       FT_GlyphSlot      slot,
--                       const FT_Matrix*  matrix,
--                       const FT_Vector*  delta )
--  {
--    FT_Error  error = FT_Err_Ok;
+-    /* set up default subpixel geometry for striped RGB panels. */
+-    sub[0].x = -21;
+-    sub[0].y = 0;
+-    sub[1].x = 0;
+-    sub[1].y = 0;
+-    sub[2].x = 21;
+-    sub[2].y = 0;
 +        }
 +        else
 +        {
@@ -5100,39 +5144,64 @@ index ef176bdf1..46da42efc 100644
 +          }
 +        }
  
+-#elif 0   /* or else, once ClearType patents expire */
 +        if ( strategy_use_strengths )
 +        {
 +          FT_Int strength_cutoff = center_offset;
  
--    if ( slot->format != render->glyph_format )
--    {
--      error = FT_THROW( Invalid_Argument );
-+
+-    FT_Library_SetLcdFilter( render->root.library, FT_LCD_FILTER_DEFAULT );
+ 
+-#endif
 +          delta2 = new_distance - stem_distance;
-+
+ 
+-    render->clazz->raster_class->raster_reset( render->raster, NULL, 0 );
 +          if ( abs ( delta2 ) > strength_cutoff )
 +            strength_cutoff = delta2;
-+
+ 
+-    return 0;
+-  }
 +          max_strength = ( strength_cutoff * fitting_strength ) / 100;
-+
+ 
 +          if ( delta2 < -max_strength )
 +            new_distance = stem_distance - max_strength;
 +          else if ( delta2 > max_strength )
 +            new_distance = stem_distance + max_strength;
 +        }
-+
+ 
+-  /* sets render-specific mode */
+-  static FT_Error
+-  ft_smooth_set_mode( FT_Renderer  render,
+-                      FT_ULong     mode_tag,
+-                      FT_Pointer   data )
+-  {
+-    /* we simply pass it to the raster */
+-    return render->clazz->raster_class->raster_set_mode( render->raster,
+-                                                         mode_tag,
+-                                                         data );
+-  }
 +        *scale_value = (float)( new_distance ) / (float)( stem_distance );
 +        *translate_value = *translate_value
 +           - ( (float)( stems[main_stem].center * (float)new_distance )
 +                      / (float)stem_distance - stems[main_stem].center ) / 12;
-+
+ 
+-  /* transform a given glyph image */
+-  static FT_Error
+-  ft_smooth_transform( FT_Renderer       render,
+-                       FT_GlyphSlot      slot,
+-                       const FT_Matrix*  matrix,
+-                       const FT_Vector*  delta )
+-  {
+-    FT_Error  error = FT_Err_Ok;
 +        if ( valid_stems == 2 )
 +          *embolden_value = ( 64.0 / *scale_value - 64.0 );
-+
+ 
 +        if ( valid_stems == 3 )
 +          *embolden_value = ( 64.0 / *scale_value - 64.0 ) / 1.5;
 +      }
-+
+ 
+-    if ( slot->format != render->glyph_format )
+-    {
+-      error = FT_THROW( Invalid_Argument );
 +      if ( verbose )
 +        printf ( "%lu stems:", valid_stems );
 +
@@ -5274,7 +5343,7 @@ index ef176bdf1..46da42efc 100644
  
    /* convert a slot's glyph image into a bitmap */
    static FT_Error
-@@ -97,17 +2322,218 @@
+@@ -116,17 +2321,218 @@
                              const FT_Vector*  origin,
                              FT_Render_Mode    required_mode )
    {
@@ -5497,7 +5566,7 @@ index ef176bdf1..46da42efc 100644
  
      /* check glyph image format */
      if ( slot->format != render->glyph_format )
-@@ -123,6 +2549,128 @@
+@@ -142,6 +2548,128 @@
        goto Exit;
      }
  
@@ -5626,25 +5695,32 @@ index ef176bdf1..46da42efc 100644
      /* release old bitmap buffer */
      if ( slot->internal->flags & FT_GLYPH_OWN_BITMAP )
      {
-@@ -130,30 +2678,85 @@
+@@ -149,34 +2677,85 @@
        slot->internal->flags &= ~FT_GLYPH_OWN_BITMAP;
      }
  
--    ft_glyphslot_preset_bitmap( slot, mode, origin );
--
-     /* allocate new one */
--    if ( FT_ALLOC_MULT( bitmap->buffer, bitmap->rows, bitmap->pitch ) )
--      goto Exit;
+-    if ( ft_glyphslot_preset_bitmap( slot, mode, origin ) )
++    /* allocate new one */
 +    pitch = width;
 +    if ( hmul )
-+    {
+     {
+-      error = FT_THROW( Raster_Overflow );
+-      goto Exit;
 +      width = width * 3;
 +      pitch = FT_PAD_CEIL( width, 4 );
-+    }
+     }
  
--    slot->internal->flags |= FT_GLYPH_OWN_BITMAP;
+-    /* allocate new one */
+-    if ( FT_ALLOC_MULT( bitmap->buffer, bitmap->rows, bitmap->pitch ) )
+-      goto Exit;
 +    if ( vmul )
 +      height *= 3;
+ 
+-    slot->internal->flags |= FT_GLYPH_OWN_BITMAP;
++    x_shift = cbox.xMin;
++    y_shift = cbox.yMin;
++    x_left  = cbox.xMin >> 6;
++    y_top   = cbox.yMax >> 6;
  
 -    x_shift = 64 * -slot->bitmap_left;
 -    y_shift = 64 * -slot->bitmap_top;
@@ -5652,12 +5728,6 @@ index ef176bdf1..46da42efc 100644
 -      y_shift += 64 * (FT_Int)bitmap->rows / 3;
 -    else
 -      y_shift += 64 * (FT_Int)bitmap->rows;
-+    x_shift = cbox.xMin;
-+    y_shift = cbox.yMin;
-+    x_left  = cbox.xMin >> 6;
-+    y_top   = cbox.yMax >> 6;
- 
--    if ( origin )
 +#ifdef FT_CONFIG_OPTION_SUBPIXEL_RENDERING
 +    if ( lcd_filter_func )
 +    {
@@ -5668,7 +5738,8 @@ index ef176bdf1..46da42efc 100644
 +        width   += 3 * lcd_extra;
 +        pitch    = FT_PAD_CEIL( width, 4 );
 +      }
-+
+ 
+-    if ( origin )
 +      if ( vmul )
 +      {
 +        y_shift -= 64 * ( lcd_extra >> 1 );
@@ -5728,7 +5799,7 @@ index ef176bdf1..46da42efc 100644
  
      /* set up parameters */
      params.target = bitmap;
-@@ -200,143 +2803,240 @@
+@@ -223,159 +2802,240 @@
      if ( error )
        goto Exit;
  
@@ -5743,11 +5814,6 @@ index ef176bdf1..46da42efc 100644
 -
 -      /* Per-face LCD filtering takes priority if set up. */
 -      if ( slot->face && slot->face->internal->lcd_filter_func )
--      {
--        lcd_weights     = slot->face->internal->lcd_weights;
--        lcd_filter_func = slot->face->internal->lcd_filter_func;
--      }
--      else
 +      if ( align_called == 0                                  &&  cur_width / ppem < 10 &&
 +           ( alignment_strength > 0 || fitting_strength > 0 ) )
 +        _lcd_stem_align ( bitmap,
@@ -5762,19 +5828,22 @@ index ef176bdf1..46da42efc 100644
 +      if ( align_called == 0                              &&
 +           ( translate_value != 0 || scale_value != 1.0 ) )
        {
--        lcd_weights     = slot->library->lcd_weights;
--        lcd_filter_func = slot->library->lcd_filter_func;
+-        lcd_weights     = slot->face->internal->lcd_weights;
+-        lcd_filter_func = slot->face->internal->lcd_filter_func;
 +        align_called = 1;
 +        goto RERENDER;
        }
+-      else
++
++      if ( mode == FT_RENDER_MODE_LCD )
+       {
+-        lcd_weights     = slot->library->lcd_weights;
+-        lcd_filter_func = slot->library->lcd_filter_func;
+-      }
  
 -      if ( lcd_filter_func )
 -        lcd_filter_func( bitmap, mode, lcd_weights );
 -    }
-+      if ( mode == FT_RENDER_MODE_LCD )
-+      {
- 
--#else /* !FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
 +        if ( fringe_filter_strength > 0 /*&& autohinted*/ )
 +          _ft_lcd_fringe_filter( bitmap,
 +                                 mode,
@@ -5870,39 +5939,36 @@ index ef176bdf1..46da42efc 100644
 +          }
 +        }
  
+-#else /* !FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
+ 
 -    if ( hmul )  /* lcd */
 -    {
 -      FT_Byte*  line;
 -      FT_Byte*  temp = NULL;
 -      FT_UInt   i, j;
++        if ( lcd_filter_func )
++          lcd_filter_func( bitmap, mode, lcd_weights );
  
 -      unsigned int  height = bitmap->rows;
 -      unsigned int  width  = bitmap->width;
 -      int           pitch  = bitmap->pitch;
-+        if ( lcd_filter_func )
-+          lcd_filter_func( bitmap, mode, lcd_weights );
- 
 +        if ( grayscale_filter_strength > 0 )
 +          _ft_lcd_grayscale_filter( bitmap,
 +                                    mode,
 +                                    grayscale_filter_strength,
 +                                    slot->library );
  
--      /* Render 3 separate monochrome bitmaps, shifting the outline  */
--      /* by 1/3 pixel.                                               */
--      width /= 3;
+-      FT_Vector*  sub = slot->library->lcd_geometry;
 +      }
  
--      bitmap->buffer += width;
 +      /* Global values */
 +      if ( brightness_value != 0 || contrast_value != 0 )
 +        _ft_bitmap_bc ( bitmap,
 +                        (float)brightness_value / 300.0,
 +                        (float)contrast_value / 300.0);
  
--      error = render->raster_render( render->raster, &params );
--      if ( error )
--        goto Exit;
+-      /* Render 3 separate monochrome bitmaps, shifting the outline.  */
+-      width /= 3;
 +      FT_Outline_Done( slot->library, outline_orig );
 +    }
 +    else if ( mode == FT_RENDER_MODE_LCD     &&
@@ -5913,12 +5979,20 @@ index ef176bdf1..46da42efc 100644
 +      lcd_filter_func( bitmap, mode, lcd_weights );
 +#endif /* FT_CONFIG_OPTION_INFINALITY_PATCHSET */
  
--      FT_Outline_Translate( outline, -21, 0 );
--      x_shift        -= 21;
--      bitmap->buffer += width;
+-      FT_Outline_Translate( outline,
+-                            -sub[0].x,
+-                            -sub[0].y );
+-      error = render->raster_render( render->raster, &params );
+-      if ( error )
+-        goto Exit;
 +#else /* !FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
  
+-      bitmap->buffer += width;
+-      FT_Outline_Translate( outline,
+-                            sub[0].x - sub[1].x,
+-                            sub[0].y - sub[1].y );
 -      error = render->raster_render( render->raster, &params );
+-      bitmap->buffer -= width;
 -      if ( error )
 -        goto Exit;
 +    /* render outline into bitmap */
@@ -5926,18 +6000,22 @@ index ef176bdf1..46da42efc 100644
 +    if ( error )
 +      goto Exit;
  
--      FT_Outline_Translate( outline,  42, 0 );
--      x_shift        += 42;
+-      bitmap->buffer += 2 * width;
+-      FT_Outline_Translate( outline,
+-                            sub[1].x - sub[2].x,
+-                            sub[1].y - sub[2].y );
+-      error = render->raster_render( render->raster, &params );
 -      bitmap->buffer -= 2 * width;
+-      if ( error )
+-        goto Exit;
 +    /* expand it horizontally */
 +    if ( hmul )
 +    {
 +      FT_Byte*  line = bitmap->buffer;
 +      FT_UInt   hh;
  
--      error = render->raster_render( render->raster, &params );
--      if ( error )
--        goto Exit;
+-      x_shift -= sub[2].x;
+-      y_shift -= sub[2].y;
  
 -      /* XXX: Rearrange the bytes according to FT_PIXEL_MODE_LCD.    */
 -      /* XXX: It is more efficient to render every third byte above. */
@@ -5972,50 +6050,60 @@ index ef176bdf1..46da42efc 100644
 -      FT_FREE( temp );
      }
 -    else if ( vmul )  /* lcd_v */
--    {
--      int  pitch  = bitmap->pitch;
- 
++
 +    /* expand it vertically */
 +    if ( vmul )
-+    {
+     {
+-      int  pitch  = bitmap->pitch;
 +      FT_Byte*  read  = bitmap->buffer + ( height - height_org ) * pitch;
 +      FT_Byte*  write = bitmap->buffer;
 +      FT_UInt   hh;
  
--      /* Render 3 separate monochrome bitmaps, shifting the outline  */
--      /* by 1/3 pixel. Triple the pitch to render on each third row. */
--      bitmap->pitch *= 3;
--      bitmap->rows  /= 3;
+-      FT_Vector*  sub = slot->library->lcd_geometry;
  
--      bitmap->buffer += pitch;
 +      for ( hh = height_org; hh > 0; hh-- )
 +      {
 +        ft_memcpy( write, read, pitch );
 +        write += pitch;
  
--      error = render->raster_render( render->raster, &params );
--      if ( error )
--        goto Exit;
+-      /* Render 3 separate monochrome bitmaps, shifting the outline. */
+-      /* Notice that the subpixel geometry vectors are rotated.      */
+-      /* Triple the pitch to render on each third row.               */
+-      bitmap->pitch *= 3;
+-      bitmap->rows  /= 3;
 +        ft_memcpy( write, read, pitch );
 +        write += pitch;
  
--      FT_Outline_Translate( outline, 0,  21 );
--      y_shift        += 21;
--      bitmap->buffer += pitch;
+-      FT_Outline_Translate( outline,
+-                            -sub[0].y,
+-                            sub[0].x );
+-      error = render->raster_render( render->raster, &params );
+-      if ( error )
+-        goto Exit;
 +        ft_memcpy( write, read, pitch );
 +        write += pitch;
 +        read  += pitch;
 +      }
 +    }
  
+-      bitmap->buffer += pitch;
+-      FT_Outline_Translate( outline,
+-                            sub[0].y - sub[1].y,
+-                            sub[1].x - sub[0].x );
 -      error = render->raster_render( render->raster, &params );
+-      bitmap->buffer -= pitch;
 -      if ( error )
 -        goto Exit;
 +#endif /* !FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
  
--      FT_Outline_Translate( outline, 0, -42 );
--      y_shift        -= 42;
+-      bitmap->buffer += 2 * pitch;
+-      FT_Outline_Translate( outline,
+-                            sub[1].y - sub[2].y,
+-                            sub[2].x - sub[1].x );
+-      error = render->raster_render( render->raster, &params );
 -      bitmap->buffer -= 2 * pitch;
+-      if ( error )
+-        goto Exit;
 +    /*
 +     * XXX: on 16bit system, we return an error for huge bitmap
 +     * to prevent an overflow.
@@ -6026,9 +6114,8 @@ index ef176bdf1..46da42efc 100644
 +      goto Exit;
 +    }
  
--      error = render->raster_render( render->raster, &params );
--      if ( error )
--        goto Exit;
+-      x_shift -= sub[2].y;
+-      y_shift += sub[2].x;
 +    slot->format      = FT_GLYPH_FORMAT_BITMAP;
 +    slot->bitmap_left = (FT_Int)x_left;
 +    slot->bitmap_top  = (FT_Int)y_top;
@@ -6067,7 +6154,7 @@ index ef176bdf1..46da42efc 100644
      return error;
    }
  
-@@ -363,8 +3063,14 @@
+@@ -402,8 +3062,14 @@
                          FT_Render_Mode    mode,
                          const FT_Vector*  origin )
    {
@@ -6084,7 +6171,7 @@ index ef176bdf1..46da42efc 100644
    }
  
  
-@@ -375,8 +3081,14 @@
+@@ -414,8 +3080,14 @@
                            FT_Render_Mode    mode,
                            const FT_Vector*  origin )
    {
@@ -6101,11 +6188,38 @@ index ef176bdf1..46da42efc 100644
    }
  
  
+@@ -442,7 +3114,7 @@
+     (FT_Renderer_GetCBoxFunc)  ft_smooth_get_cbox,   /* get_glyph_cbox  */
+     (FT_Renderer_SetModeFunc)  ft_smooth_set_mode,   /* set_mode        */
+ 
+-    (FT_Raster_Funcs*)&ft_grays_raster               /* raster_class    */
++    (FT_Raster_Funcs*)&ft_grays_raster           /* raster_class    */
+   )
+ 
+ 
+@@ -469,7 +3141,7 @@
+     (FT_Renderer_GetCBoxFunc)  ft_smooth_get_cbox,    /* get_glyph_cbox  */
+     (FT_Renderer_SetModeFunc)  ft_smooth_set_mode,    /* set_mode        */
+ 
+-    (FT_Raster_Funcs*)&ft_grays_raster                /* raster_class    */
++    (FT_Raster_Funcs*)&ft_grays_raster            /* raster_class    */
+   )
+ 
+ 
+@@ -496,7 +3168,7 @@
+     (FT_Renderer_GetCBoxFunc)  ft_smooth_get_cbox,      /* get_glyph_cbox  */
+     (FT_Renderer_SetModeFunc)  ft_smooth_set_mode,      /* set_mode        */
+ 
+-    (FT_Raster_Funcs*)&ft_grays_raster                  /* raster_class    */
++    (FT_Raster_Funcs*)&ft_grays_raster              /* raster_class    */
+   )
+ 
+ 
 diff --git a/src/truetype/ttinterp.c b/src/truetype/ttinterp.c
-index da9b595ab..32d31b15b 100644
+index 403f3753c..8a6775fc1 100644
 --- a/src/truetype/ttinterp.c
 +++ b/src/truetype/ttinterp.c
-@@ -5794,6 +5794,7 @@
+@@ -5850,6 +5850,7 @@
  
        if ( exc->ignore_x_mode                                 &&
             exc->GS.freeVector.x != 0                          &&

@@ -1,16 +1,16 @@
 # FreeType2 with Infinality Patches (Infinality Remix repository)
 #
-# Maintainer: Philip Deljanov <philip@philipdeljanov.com>
-# Last Update: 2018-10-29
+# Maintainer: Philip Deljanov
+# Last Update: 2019-03-15
 #
 # Based off the original Infinality Ultimate Bundle package by
 # bohoomil <bohoomil@zoho.com> and the upstream freetype2 package.
 
 pkgbase=freetype2-infinality-remix
 pkgname=(freetype2-infinality-remix freetype2-demos-infinality-remix)
-pkgver=2.9.1
+pkgver=2.10.0
 pkgrel=1
-_patchrel=2018.05.01
+_patchrel=2019.03.15
 pkgdesc="TrueType font rendering library with Infinality patches"
 arch=(i686 x86_64)
 license=('GPL')
@@ -33,12 +33,12 @@ source=(https://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.t
         infinality-settings.sh
         xft-settings.sh)
 
-sha256sums=('db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d'
-            'aa2f835ef8f50072630ddc48b9eb65f1f456014ffa3b5adddcb6bf390a3c5828'
-            '806eb6363ee5963174a6740f9b7893377912165899c2c1f6372c422aab818c6a'
-            'dec2a03a7024e2504d82bf8e30013d7110a4b14664bfea9054c2728dbfb2497e'
-            'fdd11f231c7ee426d288c989214d22b9714c38d1ee8239d3acc9cc1a4ec1cf5b'
-            '7f5aa51a67a68002226f8e869eaa3f6b870c04d19135a14c64a6c355eb023a39'
+sha256sums=('fccc62928c65192fff6c98847233b28eb7ce05f12d2fea3f6cc90e8b4e5fbe06'
+            '5fdc0fd118a0a82ff36054988b82ea2fc0da2302962b51d14ca2880ee4959fb2'
+            '0466f9c2cd609349b0bd1f1b7b85b1bffc52f72eb492a7195552d86e666d06ba'
+            'ac11a24b62a6c044cc245ea9fa2a0cbd9e2e62f2371873dd33084c28a76e7176'
+            'b2d511399924452297e4f2c039f3b85d22a5e17d115e5d865c27704887d6c519'
+            '54800d4da18611cf9232aad8b63d74a83153a51bb56dd39191678c738ffc8b53'
             '36484db4b926ed026e7f32570573493b5a9793a129f08d54383a26d65a6af89b'
             'f7f8e09c44f7552c883846e9a6a1efc50377c4932234e74adc4a8ff750606467'
             '1a5c12aa96e2ee66f7316b8ccb7012520b231a2d8ee21cfe4064aa28db35a57c'
