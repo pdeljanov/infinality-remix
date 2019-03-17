@@ -17,9 +17,8 @@ The Infinality Remix repository has been created to address this problem. This r
 
   2. Cleaning up and modularizing the Fontconfig configuration files.
 
-  3. Crowdsource font-specific configuration tweaks and distribute them through this repository.
+  3. Investigating and finding solutions to font rendering issues to improve the visual quality and consistency of text on Linux.
 
-  4. Providing a drop-in repository for Arch users so that they may setup Infinality in a single command.
 
 ## What's Provided ##
 
@@ -30,9 +29,8 @@ The following packages are provided:
 | freetype2-infinality-remix | FreeType with the Infinality patch set. | Done |
 | fontconfig-infinality-remix | Fontconfig with the Infinality patch set and base configuration. | Done |
 | cairo-infinality-remix | Cairo with the Infinality patch set applied. | Done |
-| harfbuzz-infinality-remix | Upstream Harfbuzz, updated in-step with FreeType to prevent breakage. | TBD |
-| infinality-remix-config-base-fonts | Infinality Remix Fontconfig tweaks for popular fonts found in the official repositories and AUR. | WIP |
-| infinality-remix-config-web-fonts | Infinality Remix Fontconfig tweaks for popular Web fonts. | WIP |
+| infinality-remix-config-base-fonts | Infinality Remix Fontconfig tweaks for popular fonts found in the official repositories and AUR. | TBD |
+| infinality-remix-config-web-fonts | Infinality Remix Fontconfig tweaks for popular Web fonts. | TBD |
 
 ## Installation ##
 
@@ -118,7 +116,20 @@ For more precise font rendering tweaks, edit `/etc/X11/xinit/xinitrc.d/infinalit
 
 Changes made here will only apply to new desktop sessions.
 
-***Note:*** Chrome, Chrome-based browsers, and Firefox do not obey these customizations because they strip out unrecognized environment variables from their rendering processes. These applications will use the `ultimate3` preset as that's hardcoded as the default in the FreeType library. Test your customizations with GTK or QT applications.
+***Note:***  It is recommended you test your customizations with a QT or GTK application. See caveats below for more information.
+
+## Notable Differences from Infinality Ultimate ##
+
+ * Stem Darkening for TrueType fonts is enabled by default. Only QT-based applications enabled this option resulting in inconsistency with non-QT applications. It is now enabled by default for the `ultimate[1-5]` styles, for more consistent rendering across applications.
+ * Improved font substitutions using the `remix` set of FontConfig configuration files. The existing `free`, `ms`, and `combi` sets remain, but `remix` is the default.
+
+## Just Want Infinality? ##
+
+If you're an Infinality package maintainer and you just want the latest Infinality patch without this remix rubbish, simply apply the `0002-infinality-<VERSION>-<DATE>.patch` patch file.
+
+## Caveats ##
+
+ 1. Chrome, and Chrome-based browsers ship with their own version of FreeType for web content. Only the browser shell (tab bar, address bar, menu, etc.) is rendered with the system's FreeType library. Therefore, only text in the browser shell will look different when using Infinality Remix.
 
 ## Contributing ##
 

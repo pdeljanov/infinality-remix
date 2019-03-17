@@ -29,6 +29,7 @@ source=(https://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.t
         0002-infinality-${pkgver}-${_patchrel}.patch
         0004-Enable-long-PCF-family-names.patch
         0005-freetype-2.5.2-more-demos.patch
+        0006-infinality-remix-tweaks.patch
         freetype2.sh
         infinality-settings.sh
         xft-settings.sh)
@@ -40,6 +41,7 @@ sha256sums=('fccc62928c65192fff6c98847233b28eb7ce05f12d2fea3f6cc90e8b4e5fbe06'
             'b2d511399924452297e4f2c039f3b85d22a5e17d115e5d865c27704887d6c519'
             '54800d4da18611cf9232aad8b63d74a83153a51bb56dd39191678c738ffc8b53'
             '36484db4b926ed026e7f32570573493b5a9793a129f08d54383a26d65a6af89b'
+            '95075a719652d8c20867a1f7f407c9d06211368b548ea9ab9dfc17e31bd275d6'
             'f7f8e09c44f7552c883846e9a6a1efc50377c4932234e74adc4a8ff750606467'
             '1a5c12aa96e2ee66f7316b8ccb7012520b231a2d8ee21cfe4064aa28db35a57c'
             '4842d1461c240cd0f60a7247ee038271fdb1067107bea9024be6bdbb218d1bd4')
@@ -53,6 +55,8 @@ prepare() {
     patch -Np1 -i ../0001-Enable-table-validation-modules.patch
     patch -Np1 --verbose -i ../0002-infinality-${pkgver}-${_patchrel}.patch
     patch -Np1 -i ../0004-Enable-long-PCF-family-names.patch
+    patch -Np1 --verbose -i ../0006-infinality-remix-tweaks.patch
+
 
     # Patching FreeType Demos
     cd ../freetype2-demos
