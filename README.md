@@ -131,14 +131,14 @@ If you're an Infinality package maintainer and you just want the latest Infinali
 
  1. Chrome, and Chrome-based browsers ship with their own version of FreeType for web content. Only the browser shell (tab bar, address bar, menu, etc.) is rendered with the system's FreeType library. Therefore, only text in the browser shell will look different when using Infinality Remix.
  2. There are *a lot* of potential configuration files that affect font selection and rendering. Ideally you should make your settings as global as possible and remove any redundant user-local configuration files, or at the very least make sure they all agree on the same values, and with your DE. The following list are font configuration files going from user-local to global in scope:
-    i. `~/.config/fontconfig/fonts.conf`
-    i. `~/.config/fontconfig/conf.d/`
-    i. `~/.xsettingsd`
-    i. `~/.Xresources`
-    i. `/etc/fonts/conf.d/local.conf`
-    i. `/etc/fonts/conf.d/`
-	i. `/etc/X11/xinit/xinitrc.d/xft-settings.sh`
-	i. `/etc/X11/xinit/xinitrc.d/infinality-settings.sh`
+    * `~/.config/fontconfig/fonts.conf`
+    * `~/.config/fontconfig/conf.d/`
+    * `~/.xsettingsd`
+    * `~/.Xresources`
+    * `/etc/fonts/conf.d/local.conf`
+    * `/etc/fonts/conf.d/`
+    * `/etc/X11/xinit/xinitrc.d/xft-settings.sh`
+    * `/etc/X11/xinit/xinitrc.d/infinality-settings.sh`
  
 ## Contributing ##
 
