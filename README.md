@@ -59,7 +59,7 @@ The following packages are provided:
     * Anti-aliased font rendering is **enabled**.
     * **RGB** sub-pixel rendering is enabled.
     * **Slight** hinting is highly-recommended.
-    * Set your DPI correctly.
+    * Set your DPI correctly. Use a [DPI Calculator](https://www.sven.de/dpi/) to calculate a proper DPI for your system. For single monitor systems, you can let the DPI be auto-detected, but for multi-monitor systems you should set the DPI to that of your primary (or most used) monitor.
 
 
 5. Logout and back in of your desktop session for changes to take effect immediately.
@@ -76,7 +76,7 @@ output should be similar to:
     Xft.lcdfilter:  lcddefault
     Xft.rgba:       rgb
     ```
-To change these settings, edit `/etc/X11/xinit/xinitrc.d/xft-settings.sh`. *This setting only affects X11 applications.*
+To change these settings, edit `/etc/X11/xinit/xinitrc.d/xft-settings.sh` for global changes. These settings will be overwritten by your local `~/.Xresources` file, so you must remove it, or make sure the settings are the same. *This setting only affects X11 applications.*
 
 ## Recommended Fonts ##
 
@@ -130,7 +130,16 @@ If you're an Infinality package maintainer and you just want the latest Infinali
 ## Caveats ##
 
  1. Chrome, and Chrome-based browsers ship with their own version of FreeType for web content. Only the browser shell (tab bar, address bar, menu, etc.) is rendered with the system's FreeType library. Therefore, only text in the browser shell will look different when using Infinality Remix.
-
+ 2. There are *a lot* of potential configuration files that affect font selection and rendering. Ideally you should make your settings as global as possible and remove any redundant user-local configuration files, or at the very least make sure they all agree on the same values, and with your DE. The following list are font configuration files going from user-local to global in scope:
+    i. `~/.config/fontconfig/fonts.conf`
+    i. `~/.config/fontconfig/conf.d/`
+    i. `~/.xsettingsd`
+    i. `~/.Xresources`
+    i. `/etc/fonts/conf.d/local.conf`
+    i. `/etc/fonts/conf.d/`
+	i. `/etc/X11/xinit/xinitrc.d/xft-settings.sh`
+	i. `/etc/X11/xinit/xinitrc.d/infinality-settings.sh`
+ 
 ## Contributing ##
 
 Contributions are welcome on GitHub.
