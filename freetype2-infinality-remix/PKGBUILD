@@ -1,10 +1,5 @@
-# FreeType2 with Infinality Patches (Infinality Remix repository)
-#
-# Maintainer: Philip Deljanov
-# Last Update: 2019-03-15
-#
-# Based off the original Infinality Ultimate Bundle package by
-# bohoomil <bohoomil@zoho.com> and the upstream freetype2 package.
+# Maintainer: Philip Deljanov <philip dot deljanov at gmail dot com>
+# Contributor: bohoomil <bohoomil at zoho dot com>
 
 pkgbase=freetype2-infinality-remix
 pkgname=(freetype2-infinality-remix freetype2-demos-infinality-remix)

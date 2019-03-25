@@ -1,10 +1,5 @@
-# Fontconfig with Infinality Patches (Infinality Remix repository)
-#
-# Maintainer: Philip Deljanov
-# Last Update: 2018-10-29
-#
-# Based off the original Infinality Ultimate Bundle package by
-# bohoomil <bohoomil@zoho.com> and the upstream fontconfig package.
+# Maintainer: Philip Deljanov <philip dot deljanov at gmail dot com>
+# Contributor: bohoomil <bohoomil at zoho dot com>
 
 pkgname=fontconfig-infinality-remix
 _basename=fontconfig
@@ -13,8 +8,7 @@ url='http://www.fontconfig.org/release/'
 license=('custom' 'MIT')
 pkgver=2.13.1
 pkgrel=2
-_commit=844d8709a1f3ecab45015b24b72dd775c13b2421
-arch=('i686' 'x86_64')
+arch=(i686 x86_64)
 groups=('infinality-remix')
 
 depends=('expat' 'freetype2')

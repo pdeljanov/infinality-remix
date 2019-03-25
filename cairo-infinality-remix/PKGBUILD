@@ -1,10 +1,5 @@
-# Cairo with Infinality Patches (Infinality Remix repository)
-#
-# Maintainer: Philip Deljanov
-# Last Update: 2019-03-18
-#
-# Based off the original Infinality Ultimate Bundle package by
-# bohoomil <bohoomil@zoho.com> and the upstream cairo package.
+# Maintainer: Philip Deljanov <philip dot deljanov at gmail dot com>
+# Contributor: bohoomil <bohoomil at zoho dot com>
 
 pkgname=cairo-infinality-remix
 _name=cairo
@@ -78,9 +73,7 @@ build() {
         --enable-ps \
         --enable-pdf \
         --enable-gobject \
-        --enable-gtk-doc \
-        --enable-full-testing \
-        --enable-test-surfaces
+        --enable-gtk-doc
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
   make
 }

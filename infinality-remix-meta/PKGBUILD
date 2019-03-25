@@ -1,7 +1,5 @@
-# Infinality Remix meta package.
-#
-# Maintainer: Philip Deljanov
-# Last Update: 2018-10-29
+# Maintainer: Philip Deljanov <philip dot deljanov at gmail dot com>
+# Contributor: bohoomil <bohoomil at zoho dot com>
 
 pkgname=infinality-remix-meta
 pkgver=1
