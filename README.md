@@ -42,18 +42,26 @@ The following packages are provided:
 
 3. Install the FreeType, Fontconfig, and Cairo packages, in that order:
 
-    ```
-    # Relative to the repository root directory.
+   * From the AUR:
 
-    cd ./freetype2-infinality-remix
-    makepkg -sci
-
-    cd ../fontconfig-infinality-remix
-    makepkg -sci
-
-    cd ../cairo-infinality-remix
-    makepkg -sci
-    ```
+		```
+		yay -S freetype2-infinality-remix fontconfig-infinality-remix cairo-infinality-remix
+		```
+   
+   * From GitHub:
+   
+	    ```    
+	    git clone https://github.com/pdeljanov/infinality-remix.git
+	
+	    cd infinality-remix/freetype2-infinality-remix
+	    makepkg -sci
+	
+	    cd ../fontconfig-infinality-remix
+	    makepkg -sci
+	
+	    cd ../cairo-infinality-remix
+	    makepkg -sci
+	    ```
 
 4. Ensure your desktop environment's font rendering settings are correct:
     * Anti-aliased font rendering is **enabled**.
@@ -67,6 +75,7 @@ The following packages are provided:
 
 6. Verify through Xft that non-DE aware applications will use the recommended rendering settings. Run `xrdb -query | grep Xft`, and your
 output should be similar to:
+
     ```
     Xft.antialias:  1
     Xft.autohint:   0
@@ -100,7 +109,7 @@ The following fonts are recommended and should be installed for a good experienc
  * Signika (`aur/ttf-signika`)
 
 
- ### Optional ###
+### Optional ###
 
 The following fonts look excellent, but are not under permissive licenses.
 
@@ -110,6 +119,7 @@ The following fonts look excellent, but are not under permissive licenses.
 ## Customization ##
 
 For more precise font rendering tweaks, edit `/etc/X11/xinit/xinitrc.d/infinality-settings.sh`.
+
  * The `INFINALITY_FT` variable may be used to set a preset style. Options are listed within `infinality-settings.sh`. The `ultimate3` setting is recommended, but `ultimate5` gives a "macOS" look and pairs well with Apple's San Francisco system font.
 
  * The `INFINALITY_FT_*` variables may be used to create your own style or tweak the selected preset style.
@@ -121,6 +131,7 @@ Changes made here will only apply to new desktop sessions.
 ## Notable Differences from Infinality Ultimate ##
 
  * Stem Darkening for TrueType fonts is enabled by default. Only QT-based applications enabled this option resulting in inconsistency with non-QT applications. It is now enabled by default for the `ultimate[1-5]` styles, for more consistent rendering across applications.
+ * Autohint is force enabled by default in most circumstances.
  * Improved font substitutions using the `remix` set of FontConfig configuration files. The existing `free`, `ms`, and `combi` sets remain, but `remix` is the default.
 
 ## Just Want Infinality? ##
