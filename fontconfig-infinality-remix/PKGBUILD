@@ -7,12 +7,14 @@ pkgdesc="A library for configuring and customizing font access, optimized for In
 url='http://www.fontconfig.org/release/'
 license=('custom' 'MIT')
 pkgver=2.13.91+24+g75eadca
-pkgrel=1
+pkgrel=2
 arch=(i686 x86_64)
 groups=('infinality-remix')
 
 depends=('expat' 'freetype2')
-makedepends=('gperf' 'python-lxml' 'python-six' 'git')
+makedepends=('git' 'autoconf-archive' 'gperf' 'python-lxml' 'python-six' 'docbook-utils' 'docbook-sgml'
+             'perl-sgmls' 'texlive-formatsextra>=2017' 'json-c')
+
 options=('libtool')
 
 provides=("fontconfig=$pkgver")
