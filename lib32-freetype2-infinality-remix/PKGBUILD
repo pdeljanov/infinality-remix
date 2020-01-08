@@ -14,7 +14,6 @@ url="http://www.freetype.org/"
 # Adding harfbuzz for improved OpenType features auto-hinting
 # introduces a cycle dep to harfbuzz depending on freetype wanted by upstream
 makedepends=('lib32-libx11' 'lib32-libpng' 'lib32-harfbuzz')
-
 install=freetype2.install
 
 source=(https://download-mirror.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.xz{,.sig}
@@ -83,7 +82,7 @@ check() {
 
 package_lib32-freetype2-infinality-remix() {
     groups=('infinality-remix')
-    depends=('zlib' 'bzip2' 'sh' 'libpng' 'harfbuzz')
+    depends=('zlib' 'bzip2' 'sh' 'libpng' 'harfbuzz' 'freetype2-infinality-remix')
     provides=("lib32-freetype2=$pkgver" 'lib32-freetype2-infinality' 'libfreetype.so')
     conflicts=('lib32-freetype2' 'lib32-freetype2-infinality' 'lib32-freetype2-infinality-ultimate')
 
