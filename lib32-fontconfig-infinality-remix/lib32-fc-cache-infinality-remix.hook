@@ -1,0 +1,12 @@
+[Trigger]
+Type = File
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Target = usr/share/fonts/*
+
+[Action]
+Description = Updating font cache (Infinality Remix) 32bit
+When = PostTransaction
+Exec = /usr/bin/fc-cache-32 -f
+NeedsTargets
