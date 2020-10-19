@@ -2,7 +2,7 @@
 # Contributor: bohoomil <bohoomil at zoho dot com>
 
 pkgbase=freetype2-infinality-remix
-pkgname=(freetype2-infinality-remix freetype2-demos-infinality-remix)
+pkgname=(freetype2-infinality-remix)
 pkgver=2.10.1
 pkgrel=1
 _patchrel=2019.08.21
@@ -73,8 +73,8 @@ build() {
     make
 
     # Build FreeType demos
-    cd ../freetype2-demos
-    make
+#     cd ../freetype2-demos
+#     make
 }
 
 check() {
@@ -97,15 +97,15 @@ package_freetype2-infinality-remix() {
     # Configures global default Infinality settings.
     install -Dm755 ../infinality-settings.sh "${pkgdir}/etc/X11/xinit/xinitrc.d/infinality-settings.sh"
 }
+# fails to build
+# package_freetype2-demos-infinality-remix() {
+#     pkgdesc="Freetype tools and demos"
+#     depends=('freetype2' 'libx11')
+#     conflicts=('freetype2-demos' 'freetype2-demos-git' 'freetype2-demos-infinality' 'freetype2-infinality-ultimate')
 
-package_freetype2-demos-infinality-remix() {
-    pkgdesc="Freetype tools and demos"
-    depends=('freetype2' 'libx11')
-    conflicts=('freetype2-demos' 'freetype2-demos-git' 'freetype2-demos-infinality' 'freetype2-infinality-ultimate')
-
-    cd freetype2-demos
-    install -d "${pkgdir}/usr/bin"
-    for _i in bin/{f,t}t*; do
-        libtool --mode=install install $_i "${pkgdir}/usr/bin"
-    done
-}
+#     cd freetype2-demos
+#     install -d "${pkgdir}/usr/bin"
+#     for _i in bin/{f,t}t*; do
+#         libtool --mode=install install $_i "${pkgdir}/usr/bin"
+#     done
+# }
