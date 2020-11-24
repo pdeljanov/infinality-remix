@@ -17,7 +17,7 @@ makedepends=('git' 'autoconf-archive' 'gperf' 'python-lxml' 'python-six' 'docboo
 
 options=('libtool')
 
-provides=("fontconfig=$pkgver")
+provides=("fontconfig=$pkgver" "libfontconfig.so")
 
 conflicts=('fontconfig'
             'fontconfig-infinality'
