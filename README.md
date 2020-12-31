@@ -1,4 +1,11 @@
+
 # Infinality Remix #
+
+:warning: **Deprecation Warning**: On new versions of FreeType, the Infinality patches cause various rendering glitches and/or
+segfaults (see issue #15). Only the `fontconfig-infinality-remix` package will be updated going forward for a limited time.
+Please consider alternatives to Infinality as using older versions of `freetype` can be a security hazard.
+
+If anyone with FreeType experience would like to maintain `freetype-infinality-remix` please get in-touch!
 
 ## Background ##
 The Infinality set of patches for the FreeType font rendering infrastructure has provided improved font rendering on
